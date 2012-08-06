@@ -114,7 +114,15 @@ try:
         print "Warning: unable to perform SASL auth os %s. Old authentication method used!"%server
     conn.RegisterHandler('message',messageCB)
     conn.RegisterHandler('presence', presenceCB)
-    conn.sendInitPresence()
+
+    #<c xmlns="http://jabber.org/protocol/caps"
+    #node="http://mail.google.com/xmpp/client/caps"
+    #ver="1.0"
+    #ext="voice-v1 video-v1 camera-v1"/>
+
+    caps = xmpp.simplexml.Node(tag='http://jabber.org/protocol/caps c',attrs={'node':'http://mail.google.com/xmpp/client/caps', 'ver':'1.0', 'ext':'camera-v1 video-v1 voice-v1'})
+    conn.sendCustomPresence(node=caps)
+
 
     dispatch = DispatchThread(conn)
     dispatch.setDaemon(True)
